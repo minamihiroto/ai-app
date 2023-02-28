@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -41,6 +42,7 @@ export default function Home() {
           <input type="submit" value="生成" />
         </form>
         <div>{result}</div>
+        <Link href="/chart">散布図ページへ</Link>
     </div>
   );
 }
