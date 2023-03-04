@@ -38,12 +38,12 @@ export default async function AI(req, res) {
     下記はあなたの出力例です。必ず{で始まり、}で終わってください。
     
     例1
-     { "label": "point1", "data": [{ "x": 3, "y": 1 }] }
+     { label: "point1", data: [{ "x": 3, "y": 1 }] }
 
      例2
-      { "label": "point2", "data": [{ "x": 2, "y": 4 }] }
-      { "label": "point3", "data": [{ "x": 4, "y": 1 }] }
-      { "label": "point4", "data": [{ "x": 7, "y": 6 }] }
+      { label: "point2", data: [{ "x": 2, "y": 4 }] }
+      { label: "point3", data: [{ "x": 4, "y": 1 }] }
+      { label: "point4", data: [{ "x": 7, "y": 6 }] }
     `;
 
   await completion(req.body.message, system_settings, []);
