@@ -5,15 +5,15 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default function AI(req, res) {
+export default async function AI(req, res) {
   async function completion(new_message_text, settings_text, past_messages) {
     if (past_messages == 0 && settings_text != 0) {
       const system = { role: "system", content: settings_text };
-      past_messages.push(system);
+      await  past_messages.push(system);
     }
 
     const new_message = { role: "user", content: new_message_text };
-    past_messages.push(new_message);
+    await past_messages.push(new_message);
 
     const result = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
@@ -24,16 +24,27 @@ export default function AI(req, res) {
       role: "assistant",
       content: result.data.choices[0].message.content,
     };
-    past_messages.push(response_message);
 
-    console.log(result.data.choices[0].message);
-    const response_message_text = result.data.choices[0].message.content;
+    await past_messages.push(response_message);
+    console.log(result.data.choices[0].message.content);
 
-    res.status(200).json({ result: response_message_text, log: past_messages});
+    await res.status(200).json({ result: result.data.choices[0].message.content, log: past_messages });
   }
 
-  const system_settings =
-    "あなたは5歳くらいの男の子です。これから会話シュミレーションを始めます。子供のように返答してください。";
+  const system_settings = 
+  `
+    今からあなたにはJSON形式のデータを出すプログラムになりきっていただきます。
+    そのため前置きは要りません。
+    下記はあなたの出力例です。必ず{で始まり、}で終わってください。
+    
+    例1
+     { "label": "point1", "data": [{ "x": 3, "y": 1 }] }
 
-  completion(req.body.message, system_settings, []);
+     例2
+      { "label": "point2", "data": [{ "x": 2, "y": 4 }] }
+      { "label": "point3", "data": [{ "x": 4, "y": 1 }] }
+      { "label": "point4", "data": [{ "x": 7, "y": 6 }] }
+    `;
+
+  await completion(req.body.message, system_settings, []);
 }
