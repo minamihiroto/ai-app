@@ -18,12 +18,12 @@ export default function Home() {
       const data = await response.json();
 
       setResult(data.result);
+      //一応data.logにログが返ってきてる
   }
 
   return (
     <div>
         <form onSubmit={onSubmit}>
-          <h3>AI婆さんの相談室</h3>
           <input
             type="text"
             value={messageinput}
