@@ -15,10 +15,13 @@ export default function Home() {
         body: JSON.stringify({ message: messageinput }),
       });
 
-      const data = await response.json();
-
-      setResult(data.result);
       //一応data.logにログが返ってきてる
+      const data = await response.json();
+            
+      //ここでJSONに直す
+      const jsonObject = JSON.parse(data.result);
+      
+      setResult(data.result);
   }
 
   return (
