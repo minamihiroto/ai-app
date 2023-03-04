@@ -1,50 +1,46 @@
-import { Configuration, OpenAIApi } from "openai";
+const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function myFunction (req, res) {
-
-  //もし取得した値が空の文字列またはスペースだけの場合にはじく
-  const animal = req.body.message || '';
-  if (animal.trim().length === 0) {
-    res.status(400).json({
-      error: {
-        message: "相談事を入力してください",
-      }
-    });
-    return;
-  }
-
-  try {
-    //生成されたプロンプトに基づいてテキスト生成を試みます
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.7,
-      max_tokens: 200,
-    });
-    //生成されたテキストの1つの選択肢を含むJSONレスポンスが返される
-    res.status(200).json({ result: completion.data.choices[0].text });
-  } catch(error) {
-    //エラー
-    if (error.response) {
-      console.error(error.response.status, error.response.data);
-      res.status(error.response.status).json(error.response.data);
-    } else {
-      console.error(`OpenAI API リクエストエラー: ${error.message}`);
-      res.status(500).json({
-        error: {
-          message: 'リクエスト中にエラーが発生しました.',
-        }
+export default function AI(req, res) {
+  async function completion(new_message_text, settings_text, past_messages) {
+    if (new_message_text === 0) {
+      new_message_text.status(400).json({
+        error: { message: "入力してください" },
       });
     }
-  }
-}
 
-//APIに渡すプロンプトを作成
-function generatePrompt(animal) {
-    return `あなたはよくいるお婆さんです。おばあさんの口調で下記の相談に答えてください。タメ口でお願いします。\n${animal}`;
+    if (past_messages == 0 && settings_text != 0) {
+      const system = { role: "system", content: settings_text };
+      past_messages.push(system);
+    }
+
+    const new_message = { role: "user", content: new_message_text };
+    past_messages.push(new_message);
+
+    const result = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: past_messages,
+    });
+
+    const response_message = {
+      role: "assistant",
+      content: result.data.choices[0].message.content,
+    };
+    past_messages.push(response_message);
+
+    console.log(result.data.choices[0].message);
+    const response_message_text = result.data.choices[0].message.content;
+
+    res.status(200).json({ result: response_message_text }, { past_messages });
+  }
+
+  const system_settings =
+    "あなたは5歳くらいの男の子です。これから会話シュミレーションを始めます。子供のように返答してください。";
+
+  completion(req.body.message, system_settings, []);
+
 }
