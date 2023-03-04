@@ -38,10 +38,12 @@ export default function Home() {
     const data = await response.json();
 
     //ここでJSONに直す
-    const jsonObject = JSON.parse(data.result);
-    const dataset = [jsonObject];
+    const regex = /\[.*\]/s; // 正規表現でJSONの配列文字列だけを取得
+    const jsonStr = data.result.match(regex);
+    const jsonObject = JSON.parse(jsonStr);
+    console.log(jsonObject);
     const result = {
-      datasets: dataset,
+      datasets: jsonObject,
     };
 
     setResult(result);
@@ -53,6 +55,7 @@ export default function Home() {
         <h3>生成できた文言</h3>
         <p>
           ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+          ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
         </p>
         <input
           type="text"
@@ -70,6 +73,7 @@ export default function Home() {
           <h3>生成できた文言</h3>
           <p>
             ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+            ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
           </p>
           <input
             type="text"
