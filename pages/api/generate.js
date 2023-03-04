@@ -7,12 +7,6 @@ const openai = new OpenAIApi(configuration);
 
 export default function AI(req, res) {
   async function completion(new_message_text, settings_text, past_messages) {
-    if (new_message_text === 0) {
-      new_message_text.status(400).json({
-        error: { message: "入力してください" },
-      });
-    }
-
     if (past_messages == 0 && settings_text != 0) {
       const system = { role: "system", content: settings_text };
       past_messages.push(system);
@@ -35,12 +29,11 @@ export default function AI(req, res) {
     console.log(result.data.choices[0].message);
     const response_message_text = result.data.choices[0].message.content;
 
-    res.status(200).json({ result: response_message_text }, { past_messages });
+    res.status(200).json({ result: response_message_text, log: past_messages});
   }
 
   const system_settings =
     "あなたは5歳くらいの男の子です。これから会話シュミレーションを始めます。子供のように返答してください。";
 
   completion(req.body.message, system_settings, []);
-
 }
