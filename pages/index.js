@@ -49,8 +49,8 @@ export default function Home() {
     setResult(result);
   }
 
-  if (result == null) {
-    return (
+  return (
+    <div>
       <form onSubmit={onSubmit}>
         <h3>生成できた文言</h3>
         <p>
@@ -66,29 +66,11 @@ export default function Home() {
         />
         <input type="submit" value="生成" />
       </form>
-    );
-  } else {
-    return (
-      <div>
-        <form onSubmit={onSubmit}>
-          <h3>生成できた文言</h3>
-          <p>
-            ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-            ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-            ・labelがmomo1とmomo2とmomo3とmomo4とmomo5とmomo6とmomo7とmomo8とmomo9とmomo10とmomo11とmomo12とmomo13とmomo14とmomo15とmomo16とmomo17とmomo18とmomo19とmomo20のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-          </p>
-          <input
-            type="text"
-            style={{ width: "1000px", height: "24px" }}
-            value={messageinput}
-            onChange={(e) => setMessageinput(e.target.value)}
-          />
-          <input type="submit" value="生成" />
-        </form>
+      {result && (
         <div style={styles.chartContainer}>
           <Scatter data={result} options={options} />
         </div>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
