@@ -5,18 +5,32 @@ Chart.register(...registerables);
 
 // グラフのオプションを設定する
 const options = {
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: "bottom",
+  scales: {
+    y: {
+      suggestedMin: 0,
+      suggestedMax: 10,
     },
+    x: {
+      suggestedMin: 0,
+      suggestedMax: 10,
+    },
+  },
+  maintainAspectRatio: false,
+  elements: {
+    point: {
+      backgroundColor: "#FF0000",
+      radius: 8,
+    },
+  },
+  plugins: {
+    legend: false,
   },
 };
 
 const styles = {
   chartContainer: {
-    width: "500px",
-    height: "500px",
+    width: "600px",
+    height: "600px",
   },
 };
 
@@ -60,7 +74,11 @@ export default function Home() {
         <h3>生成できた文言</h3>
         <p>
           ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+        </p>
+        <p>
           ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+        </p>
+        <p>
           ・labelがmomo1とmomo2とmomo3とmomo4とmomo5とmomo6とmomo7とmomo8とmomo9とmomo10とmomo11とmomo12とmomo13とmomo14とmomo15とmomo16とmomo17とmomo18とmomo19とmomo20のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
         </p>
         <input
