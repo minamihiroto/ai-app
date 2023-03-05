@@ -23,6 +23,9 @@ const styles = {
 export default function Home() {
   const [messageinput, setMessageinput] = useState("");
   const [result, setResult] = useState();
+  const [all_token, setAlltoken] = useState();
+  const [prompt_token, setPrompttoken] = useState();
+  const [completion_token, setCompletiontoken] = useState();
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -37,16 +40,18 @@ export default function Home() {
     //一応data.logにログが返ってきてる
     const data = await response.json();
 
-    //ここでJSONに直す
-    const regex = /\[.*\]/s; // 正規表現でJSONの配列文字列だけを取得
+    const regex = /\[.*\]/s;
+
     const jsonStr = data.result.match(regex);
     const jsonObject = JSON.parse(jsonStr);
-    console.log(jsonObject);
-    const result = {
+    const jsonResult = {
       datasets: jsonObject,
     };
 
-    setResult(result);
+    setResult(jsonResult);
+    setAlltoken(data.tokens.total_tokens);
+    setPrompttoken(data.tokens.prompt_tokens);
+    setCompletiontoken(data.tokens.completion_tokens);
   }
 
   return (
@@ -69,6 +74,10 @@ export default function Home() {
       {result && (
         <div style={styles.chartContainer}>
           <Scatter data={result} options={options} />
+          <h3>今回の利用トークン数</h3>
+          <p>入力：{prompt_token}</p>
+          <p>出力：{completion_token}</p>
+          <p>合計：{all_token}</p>
         </div>
       )}
     </div>

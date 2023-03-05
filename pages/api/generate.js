@@ -28,7 +28,7 @@ export default async function AI(req, res) {
     await past_messages.push(response_message);
     console.log(result.data.choices[0].message.content);
 
-    await res.status(200).json({ result: result.data.choices[0].message.content, log: past_messages });
+    await res.status(200).json({ result: result.data.choices[0].message.content, log: past_messages, tokens: result.data.usage });
   }
 
   const system_settings = 
