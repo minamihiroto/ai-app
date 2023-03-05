@@ -40,8 +40,10 @@ export default function Home() {
   const [all_token, setAlltoken] = useState();
   const [prompt_token, setPrompttoken] = useState();
   const [completion_token, setCompletiontoken] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(event) {
+    setIsLoading(true);
     event.preventDefault();
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -51,8 +53,8 @@ export default function Home() {
       body: JSON.stringify({ message: messageinput }),
     });
 
-    //一応data.logにログが返ってきてる
     const data = await response.json();
+    setIsLoading(false);
 
     const regex = /\[.*\]/s;
 
@@ -89,7 +91,9 @@ export default function Home() {
         />
         <input type="submit" value="生成" />
       </form>
-      {result && (
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : result ? (
         <div style={styles.chartContainer}>
           <Scatter data={result} options={options} />
           <h3>今回の利用トークン数</h3>
@@ -97,7 +101,7 @@ export default function Home() {
           <p>出力：{completion_token}</p>
           <p>合計：{all_token}</p>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
