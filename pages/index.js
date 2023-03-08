@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Scatter } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
+import { useAuth } from "../components/AuthProvider.js";
+import { useRouter } from "next/router";
+
 Chart.register(...registerables);
 
 // グラフのオプションを設定する
@@ -41,6 +44,12 @@ export default function Home() {
   const [prompt_token, setPrompttoken] = useState();
   const [completion_token, setCompletiontoken] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const { logout } = useAuth();
+  const router = useRouter();
+
+  const onLogout = () => {
+    logout().then(() => router.push("/login"));
+  };
 
   async function onSubmit(event) {
     setIsLoading(true);
@@ -102,6 +111,9 @@ export default function Home() {
           <p>合計：{all_token}</p>
         </div>
       ) : null}
+      <form onSubmit={onLogout}>
+        <button type="submit">logout</button>
+      </form>
     </div>
   );
 }
