@@ -49,7 +49,7 @@ export default function Signup() {
             validate: (value) => {
               return (
                 value === getValues("password") ||
-                "メールアドレスが一致しません"
+                "パスワードが一致しません"
               );
             },
           })}
