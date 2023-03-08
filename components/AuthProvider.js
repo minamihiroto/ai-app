@@ -49,8 +49,14 @@ const AuthProvider = ({ children }) => {
     await auth.signUp({ email: email, password: password });
   };
 
+  const loginGoogle = async () => {
+    await auth.signInWithOAuth({
+      provider: 'google',
+    });
+  };
+
   const logout = () => {
-     auth.signOut();
+    auth.signOut();
   };
 
   const exposed = {
@@ -60,6 +66,7 @@ const AuthProvider = ({ children }) => {
     signup,
     login,
     logout,
+    loginGoogle,
   };
 
   return (
