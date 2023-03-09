@@ -34,13 +34,11 @@ export default function Login() {
         <h1>ログイン</h1>
         <label>メールアドレス</label>
         <input
-          // {...register("email", { required: "入力してください" })}
           type="text"
         />
         {errors.email && errors.email.message}
         <label>パスワード</label>
         <input
-          // {...register("password", { required: "入力してください" })}
           type="password"
         />
         {errors.password && errors.password.message}
