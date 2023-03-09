@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Scatter } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { useAuth } from "../components/AuthProvider.js";
+import { useAuth } from "../components/authProvider.js";
 import { useRouter } from "next/router";
 
 Chart.register(...registerables);

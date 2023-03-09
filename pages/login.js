@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useAuth } from "../components/AuthProvider";
+import { useAuth } from "../components/authProvider";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 

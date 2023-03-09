@@ -1,6 +1,6 @@
-import { AuthProvider } from "../components/AuthProvider.js"
+import { AuthProvider } from "../components/authProvider.js"
 import { useRouter } from "next/router"
-import ProtectedRoute from "../components/ProtectedRoute.js"
+import ProtectedRoute from "../components/protectedRoute.js"
 
 const noAuthRequired = ["/login","/signup","/chart"]
 
