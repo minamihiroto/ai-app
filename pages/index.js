@@ -2,11 +2,15 @@ import { useState } from "react";
 import { Scatter } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useAuth } from "../components/authProvider.js";
+import { getDatabase } from "../components/notionProvider.js";
 import { useRouter } from "next/router";
+import Link from 'next/link'
+import { Text } from "./[id].js";
 
 Chart.register(...registerables);
 
-// グラフのオプションを設定する
+export const databaseId = process.env.NOTION_DB_ID;
+
 const options = {
   scales: {
     y: {
@@ -37,7 +41,7 @@ const styles = {
   },
 };
 
-export default function Home() {
+export default function Home({posts}) {
   const [messageinput, setMessageinput] = useState("");
   const [result, setResult] = useState();
   const [all_token, setAlltoken] = useState();
@@ -116,6 +120,43 @@ export default function Home() {
       </form>
       <p>ログイン中メールアドレス</p>
       <p>{session.user.email}</p>
+      <ol className={styles.posts}>
+          {posts.map((post) => {
+            const date = new Date(post.last_edited_time).toLocaleString(
+              "en-US",
+              {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+              }
+            );
+            return (
+              <li key={post.id} className={styles.post}>
+                <h3 className={styles.postTitle}>
+                  <Link href={`/${post.id}`}>
+                      <Text text={post.properties.Name.title} />
+                  </Link>
+                </h3>
+
+                <p className={styles.postDescription}>{date}</p>
+                <Link href={`/${post.id}`}>
+                   Read post →
+                </Link>
+              </li>
+            );
+          })}
+        </ol>
     </div>
   );
 }
+
+export const getStaticProps = async () =>{
+  const database = await getDatabase(databaseId);
+
+  return{
+    props:{
+      posts: database,
+    },
+    revalidate: 1,
+  }
+};
