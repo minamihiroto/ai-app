@@ -44,7 +44,7 @@ export default function Home() {
   const [prompt_token, setPrompttoken] = useState();
   const [completion_token, setCompletiontoken] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const { logout } = useAuth();
+  const { session,logout } = useAuth();
   const router = useRouter();
 
   const onLogout = () => {
@@ -114,6 +114,8 @@ export default function Home() {
       <form onSubmit={onLogout}>
         <button type="submit">logout</button>
       </form>
+      <p>ログイン中メールアドレス</p>
+      <p>{session.user.email}</p>
     </div>
   );
 }
