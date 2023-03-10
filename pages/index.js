@@ -51,6 +51,8 @@ export default function Home({ posts }) {
   const { session, logout } = useAuth();
   const router = useRouter();
 
+  posts = posts.filter(post => post.properties.Email.email === session.user.email);
+
   const onLogout = () => {
     logout().then(() => router.push("/login"));
   };
@@ -127,7 +129,6 @@ export default function Home({ posts }) {
             day: "2-digit",
             year: "numeric",
           });
-
           return (
             <li key={post.id}>
               <h4>
@@ -135,7 +136,7 @@ export default function Home({ posts }) {
                   <Text text={post.properties.Name.title} />
                 </Link>
               </h4>
-              <p>{date}</p>
+              <p>{post.properties.Email.email}</p>
             </li>
           );
         })}
