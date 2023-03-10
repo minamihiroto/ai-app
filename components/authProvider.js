@@ -41,14 +41,6 @@ const AuthProvider = ({ children }) => {
     };
   });
 
-  const login = async ({ email, password }) => {
-    await auth.signInWithPassword({ email: email, password: password });
-  };
-
-  const signup = async ({ email, password }) => {
-    await auth.signUp({ email: email, password: password });
-  };
-
   const loginGoogle = async () => {
     await auth.signInWithOAuth({
       provider: 'google',
@@ -63,8 +55,6 @@ const AuthProvider = ({ children }) => {
     session,
     loading,
     setLoading,
-    signup,
-    login,
     logout,
     loginGoogle,
   };
