@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { databaseId } from "./index.js";
 import { getDatabase, getPage } from "../components/notionProvider.js";
+import { useAuth } from "../components/authProvider.js";
+import { useRouter } from "next/router";
 
 export const Text = ({ text }) => {
   return text.map((value, index) => {
@@ -14,16 +16,24 @@ export const Text = ({ text }) => {
 };
 
 export default function Post({ page }) {
-  return (
-    <div>
-      <h1>
-        <Text text={page.properties.Name.title} />
-      </h1>
-      <section>
-        <Link href="/">← Go home</Link>
-      </section>
-    </div>
-  );
+  const { session } = useAuth();
+  const router = useRouter();
+
+  if (page.properties.Email.email === session.user.email) {
+    return (
+      <div>
+        <h1>
+          <Text text={page.properties.Name.title} />
+        </h1>
+        <p>{page.properties.Email.email}</p>
+        <section>
+          <Link href="/">← Go home</Link>
+        </section>
+      </div>
+    );
+  } else {
+    router.push("/");
+  }
 }
 
 export const getStaticPaths = async () => {
