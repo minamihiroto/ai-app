@@ -4,7 +4,7 @@ import { Chart, registerables } from "chart.js";
 import { useAuth } from "../components/authProvider.js";
 import { getDatabase } from "../components/notionProvider.js";
 import { useRouter } from "next/router";
-import Link from 'next/link'
+import Link from "next/link";
 import { Text } from "./[id].js";
 
 Chart.register(...registerables);
@@ -41,14 +41,14 @@ const styles = {
   },
 };
 
-export default function Home({posts}) {
+export default function Home({ posts }) {
   const [messageinput, setMessageinput] = useState("");
   const [result, setResult] = useState();
   const [all_token, setAlltoken] = useState();
   const [prompt_token, setPrompttoken] = useState();
   const [completion_token, setCompletiontoken] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const { session,logout } = useAuth();
+  const { session, logout } = useAuth();
   const router = useRouter();
 
   const onLogout = () => {
@@ -86,7 +86,8 @@ export default function Home({posts}) {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <h3>生成できた文言</h3>
+        <p>ログイン中メールアドレス：{session.user.email}</p>
+        <h2>生成できた文言</h2>
         <p>
           ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
         </p>
@@ -118,45 +119,38 @@ export default function Home({posts}) {
       <form onSubmit={onLogout}>
         <button type="submit">logout</button>
       </form>
-      <p>ログイン中メールアドレス</p>
-      <p>{session.user.email}</p>
-      <ol className={styles.posts}>
-          {posts.map((post) => {
-            const date = new Date(post.last_edited_time).toLocaleString(
-              "en-US",
-              {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-              }
-            );
-            return (
-              <li key={post.id} className={styles.post}>
-                <h3 className={styles.postTitle}>
-                  <Link href={`/${post.id}`}>
-                      <Text text={post.properties.Name.title} />
-                  </Link>
-                </h3>
+      <h2>履歴</h2>
+      <ol>
+        {posts.map((post) => {
+          const date = new Date(post.last_edited_time).toLocaleString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          });
 
-                <p className={styles.postDescription}>{date}</p>
+          return (
+            <li key={post.id}>
+              <h4>
                 <Link href={`/${post.id}`}>
-                   Read post →
+                  <Text text={post.properties.Name.title} />
                 </Link>
-              </li>
-            );
-          })}
-        </ol>
+              </h4>
+              <p>{date}</p>
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }
 
-export const getStaticProps = async () =>{
+export const getStaticProps = async () => {
   const database = await getDatabase(databaseId);
 
-  return{
-    props:{
+  return {
+    props: {
       posts: database,
     },
     revalidate: 1,
-  }
+  };
 };
