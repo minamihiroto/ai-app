@@ -43,6 +43,7 @@ const styles = {
 
 export default function Home({ posts }) {
   const [messageinput, setMessageinput] = useState("");
+  const [createinput, createMessageinput] = useState("");
   const [result, setResult] = useState();
   const [all_token, setAlltoken] = useState();
   const [prompt_token, setPrompttoken] = useState();
@@ -85,6 +86,19 @@ export default function Home({ posts }) {
     setCompletiontoken(data.tokens.completion_tokens);
   }
 
+  async function onCreate(event) {
+    setIsLoading(true);
+    event.preventDefault();
+    await fetch("/api/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ json: createinput,email: session.user.email }),
+    });
+    setIsLoading(false);
+  }
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -104,6 +118,15 @@ export default function Home({ posts }) {
           style={{ width: "1000px", height: "24px" }}
           value={messageinput}
           onChange={(e) => setMessageinput(e.target.value)}
+        />
+        <input type="submit" value="生成" />
+      </form>
+      <form onSubmit={onCreate}>
+        <input
+          type="text"
+          style={{ width: "1000px", height: "24px" }}
+          value={createinput}
+          onChange={(e) => createMessageinput(e.target.value)}
         />
         <input type="submit" value="生成" />
       </form>
