@@ -136,7 +136,7 @@ export default function Home({ posts }) {
                   <Text text={post.properties.Name.title} />
                 </Link>
               </h4>
-              <p>{post.properties.Email.email}</p>
+              <p>作成日時：{date}</p>
             </li>
           );
         })}

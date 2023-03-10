@@ -25,7 +25,11 @@ export default function Post({ page }) {
         <h1>
           <Text text={page.properties.Name.title} />
         </h1>
-        <p>{page.properties.Email.email}</p>
+        <p></p>
+        <h3>アイディア表示(現状データのみ)</h3>
+        <p>{page.properties.IdeaJson.rich_text[0].plain_text}</p>
+        <h3>グラフ表示(現状データのみ)</h3>
+        <p>{page.properties.ScatterJson.rich_text[0].plain_text}</p>
         <section>
           <Link href="/">← Go home</Link>
         </section>
