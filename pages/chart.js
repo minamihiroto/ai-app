@@ -8,10 +8,12 @@ const options = {
     y: {
       suggestedMin: -10,
       suggestedMax: 10,
+      position: "center",
     },
     x: {
       suggestedMin: -10,
       suggestedMax: 10,
+      position: "center",
     },
   },
   maintainAspectRatio: false,
