@@ -4,7 +4,6 @@ const notion = new Client({ auth: `${process.env.NOTION_API_KEY}` });
 
 export default async function handler(req, res) {
   async function completion(json, email) {
-    if (req.method === "POST") {
       const entry = {
         parent: {
           database_id: `${process.env.NOTION_DB_ID}`,
@@ -48,13 +47,6 @@ export default async function handler(req, res) {
       };
       const response = await notion.pages.create(entry);
       res.status(200).json(response);
-    } else {
-      res
-        .status(200)
-        .json(
-          "Hello! This API is set for POST method only. No content is available at GET."
-        );
-    }
   }
   await completion(req.body.json, req.body.email);
 }
