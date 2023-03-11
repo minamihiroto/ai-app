@@ -6,11 +6,11 @@ Chart.register(...registerables);
 const options = {
   scales: {
     y: {
-      suggestedMin: 0,
+      suggestedMin: -10,
       suggestedMax: 10,
     },
     x: {
-      suggestedMin: 0,
+      suggestedMin: -10,
       suggestedMax: 10,
     },
   },
