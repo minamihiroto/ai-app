@@ -122,6 +122,7 @@ export default function Home({ posts }) {
         <input type="submit" value="生成" />
       </form>
       <form onSubmit={onCreate}>
+      <h2>notion create</h2>
         <input
           type="text"
           style={{ width: "1000px", height: "24px" }}
