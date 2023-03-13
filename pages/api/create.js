@@ -25,7 +25,7 @@ export default async function handler(req, res) {
             rich_text: [
               {
                 text: {
-                  content: "いいいいいいいい",
+                  content: "testtest1",
                   link: null,
                 },
                 plain_text: json,
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             rich_text: [
               {
                 text: {
-                  content: "いいいいいいいい",
+                  content: "testtest2",
                   link: null,
                 },
                 plain_text: json,
