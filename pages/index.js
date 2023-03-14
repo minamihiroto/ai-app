@@ -52,7 +52,9 @@ export default function Home({ posts }) {
   const { session, logout } = useAuth();
   const router = useRouter();
 
-  posts = posts.filter(post => post.properties.Email.email === session.user.email);
+  posts = posts.filter(
+    (post) => post.properties.Email.email === session.user.email
+  );
 
   const onLogout = () => {
     logout().then(() => router.push("/login"));
@@ -94,7 +96,7 @@ export default function Home({ posts }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ json: createinput,email: session.user.email }),
+      body: JSON.stringify({ json: createinput, email: session.user.email }),
     });
     setIsLoading(false);
   }
@@ -103,6 +105,9 @@ export default function Home({ posts }) {
     <div>
       <form onSubmit={onSubmit}>
         <p>ログイン中メールアドレス：{session.user.email}</p>
+        <form onSubmit={onLogout}>
+          <button type="submit">logout</button>
+        </form>
         <h2>生成できた文言</h2>
         <p>
           ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
@@ -122,7 +127,7 @@ export default function Home({ posts }) {
         <input type="submit" value="生成" />
       </form>
       <form onSubmit={onCreate}>
-      <h2>notion create</h2>
+        <h2>notion create</h2>
         <input
           type="text"
           style={{ width: "1000px", height: "24px" }}
@@ -130,20 +135,6 @@ export default function Home({ posts }) {
           onChange={(e) => createMessageinput(e.target.value)}
         />
         <input type="submit" value="生成" />
-      </form>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : result ? (
-        <div style={styles.chartContainer}>
-          <Scatter data={result} options={options} />
-          <h3>今回の利用トークン数</h3>
-          <p>入力：{prompt_token}</p>
-          <p>出力：{completion_token}</p>
-          <p>合計：{all_token}</p>
-        </div>
-      ) : null}
-      <form onSubmit={onLogout}>
-        <button type="submit">logout</button>
       </form>
       <h2>履歴</h2>
       <ol>
@@ -165,6 +156,17 @@ export default function Home({ posts }) {
           );
         })}
       </ol>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : result ? (
+        <div style={styles.chartContainer}>
+          <Scatter data={result} options={options} />
+          <h3>今回の利用トークン数</h3>
+          <p>入力：{prompt_token}</p>
+          <p>出力：{completion_token}</p>
+          <p>合計：{all_token}</p>
+        </div>
+      ) : null}
     </div>
   );
 }
