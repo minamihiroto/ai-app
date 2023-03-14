@@ -45,6 +45,7 @@ export default function Home({ posts }) {
   const [messageinput, setMessageinput] = useState("");
   const [createinput, createMessageinput] = useState("");
   const [result, setResult] = useState();
+  const [res, setRes] = useState();
   const [all_token, setAlltoken] = useState();
   const [prompt_token, setPrompttoken] = useState();
   const [completion_token, setCompletiontoken] = useState();
@@ -76,12 +77,14 @@ export default function Home({ posts }) {
 
     const regex = /\[.*\]/s;
 
+    const res = data.result;
     const jsonStr = data.result.match(regex);
     const jsonObject = JSON.parse(jsonStr);
     const jsonResult = {
       datasets: jsonObject,
     };
 
+    setRes(res);
     setResult(jsonResult);
     setAlltoken(data.tokens.total_tokens);
     setPrompttoken(data.tokens.prompt_tokens);
@@ -160,6 +163,7 @@ export default function Home({ posts }) {
         <p>Loading...</p>
       ) : result ? (
         <div style={styles.chartContainer}>
+          <p>レスポンス{res}</p>
           <Scatter data={result} options={options} />
           <h3>今回の利用トークン数</h3>
           <p>入力：{prompt_token}</p>
