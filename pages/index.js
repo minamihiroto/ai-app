@@ -46,6 +46,7 @@ export default function Home({ posts }) {
   const [createinput, createMessageinput] = useState("");
   const [result, setResult] = useState();
   const [res, setRes] = useState();
+  const [error, setError] = useState();
   const [all_token, setAlltoken] = useState();
   const [prompt_token, setPrompttoken] = useState();
   const [completion_token, setCompletiontoken] = useState();
@@ -75,20 +76,23 @@ export default function Home({ posts }) {
     const data = await response.json();
     setIsLoading(false);
 
-    const regex = /\[.*\]/s;
+    if (data.error) {
+      setError(data.error);
+    } else {
+      const regex = /\[.*\]/s;
+      const res = data.result;
+      const jsonStr = data.result.match(regex);
+      const jsonObject = JSON.parse(jsonStr);
+      const jsonResult = {
+        datasets: jsonObject,
+      };
 
-    const res = data.result;
-    const jsonStr = data.result.match(regex);
-    const jsonObject = JSON.parse(jsonStr);
-    const jsonResult = {
-      datasets: jsonObject,
-    };
-
-    setRes(res);
-    setResult(jsonResult);
-    setAlltoken(data.tokens.total_tokens);
-    setPrompttoken(data.tokens.prompt_tokens);
-    setCompletiontoken(data.tokens.completion_tokens);
+      setRes(res);
+      setResult(jsonResult);
+      setAlltoken(data.tokens.total_tokens);
+      setPrompttoken(data.tokens.prompt_tokens);
+      setCompletiontoken(data.tokens.completion_tokens);
+    }
   }
 
   async function onCreate(event) {
@@ -106,31 +110,12 @@ export default function Home({ posts }) {
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <p>ログイン中メールアドレス：{session.user.email}</p>
-        <form onSubmit={onLogout}>
-          <button type="submit">logout</button>
-        </form>
-        <h2>生成できた文言</h2>
-        <p>
-          ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-        </p>
-        <p>
-          ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-        </p>
-        <p>
-          ・labelがmomo1とmomo2とmomo3とmomo4とmomo5とmomo6とmomo7とmomo8とmomo9とmomo10とmomo11とmomo12とmomo13とmomo14とmomo15とmomo16とmomo17とmomo18とmomo19とmomo20のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-        </p>
-        <input
-          type="text"
-          style={{ width: "1000px", height: "24px" }}
-          value={messageinput}
-          onChange={(e) => setMessageinput(e.target.value)}
-        />
-        <input type="submit" value="生成" />
+      <p>ログイン中メールアドレス：{session.user.email}</p>
+      <form onSubmit={onLogout}>
+        <button type="submit">logout</button>
       </form>
       <form onSubmit={onCreate}>
-        <h2>notion create</h2>
+        <h2>notion data create</h2>
         <input
           type="text"
           style={{ width: "1000px", height: "24px" }}
@@ -159,8 +144,31 @@ export default function Home({ posts }) {
           );
         })}
       </ol>
+      <form onSubmit={onSubmit}>
+        <h2>GPT API</h2>
+        <p>
+          ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+        </p>
+        <p>
+          ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+        </p>
+        <p>
+          ・labelがmomo1とmomo2とmomo3とmomo4とmomo5とmomo6とmomo7とmomo8とmomo9とmomo10とmomo11とmomo12とmomo13とmomo14とmomo15とmomo16とmomo17とmomo18とmomo19とmomo20のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
+        </p>
+        <input
+          type="text"
+          style={{ width: "1000px", height: "24px" }}
+          value={messageinput}
+          onChange={(e) => setMessageinput(e.target.value)}
+        />
+        <input type="submit" value="生成" />
+      </form>
       {isLoading ? (
         <p>Loading...</p>
+      ) : error ? (
+        <div>
+          <p>Error: {error}</p>
+        </div>
       ) : result ? (
         <div style={styles.chartContainer}>
           <p>レスポンス{res}</p>
