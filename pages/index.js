@@ -65,13 +65,19 @@ export default function Home({ posts }) {
   async function onSubmit(event) {
     setIsLoading(true);
     event.preventDefault();
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: messageinput }),
-    });
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: messageinput }),
+      });
+    } catch (error) {
+      console.error(error);
+      setError("generateタイムアウト");
+      // エラーが発生した場合の処理
+    }
 
     const data = await response.json();
     setIsLoading(false);
