@@ -70,7 +70,7 @@ export default function Home({ posts }) {
       const timeoutId = setTimeout(() => {
         controller.abort();
         setError("Request timed out. Please try again later.");
-      }, 10000);
+      }, 12000);
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
