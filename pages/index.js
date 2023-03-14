@@ -63,41 +63,47 @@ export default function Home({ posts }) {
   };
 
   async function onSubmit(event) {
-    setIsLoading(true);
-    event.preventDefault();
     try {
+      setIsLoading(true);
+      event.preventDefault();
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+        setError("Request timed out. Please try again later.");
+      }, 10000);
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ message: messageinput }),
+        signal: controller.signal,
       });
+
+      const data = await response.json();
+      setIsLoading(false);
+      clearTimeout(timeoutId);
+
+      if (data.error) {
+        setError(data.error);
+      } else {
+        const regex = /\[.*\]/s;
+        const res = data.result;
+        const jsonStr = data.result.match(regex);
+        const jsonObject = JSON.parse(jsonStr);
+        const jsonResult = {
+          datasets: jsonObject,
+        };
+
+        setRes(res);
+        setResult(jsonResult);
+        setAlltoken(data.tokens.total_tokens);
+        setPrompttoken(data.tokens.prompt_tokens);
+        setCompletiontoken(data.tokens.completion_tokens);
+      }
     } catch (error) {
-      console.error(error);
-      setError("generateタイムアウト");
-      // エラーが発生した場合の処理
-    }
-
-    const data = await response.json();
-    setIsLoading(false);
-
-    if (data.error) {
-      setError(data.error);
-    } else {
-      const regex = /\[.*\]/s;
-      const res = data.result;
-      const jsonStr = data.result.match(regex);
-      const jsonObject = JSON.parse(jsonStr);
-      const jsonResult = {
-        datasets: jsonObject,
-      };
-
-      setRes(res);
-      setResult(jsonResult);
-      setAlltoken(data.tokens.total_tokens);
-      setPrompttoken(data.tokens.prompt_tokens);
-      setCompletiontoken(data.tokens.completion_tokens);
+      setIsLoading(false);
+      setError(error.message);
     }
   }
 
@@ -173,7 +179,7 @@ export default function Home({ posts }) {
         <p>Loading...</p>
       ) : error ? (
         <div>
-          <p>Error: {error}</p>
+          <p>エラー: {error}</p>
         </div>
       ) : result ? (
         <div style={styles.chartContainer}>
