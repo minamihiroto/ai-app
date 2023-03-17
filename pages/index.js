@@ -1,45 +1,12 @@
 import { useState } from "react";
 import { Scatter } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
 import { useAuth } from "../components/authProvider.js";
 import { getDatabase } from "../components/notionProvider.js";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { Text } from "./[id].js";
-
-Chart.register(...registerables);
+import options from "../components/chartConfig.js";
+import HistoryList from "../components/historyList";
 
 export const databaseId = process.env.NOTION_DB_ID;
-
-const options = {
-  scales: {
-    y: {
-      suggestedMin: 0,
-      suggestedMax: 10,
-    },
-    x: {
-      suggestedMin: 0,
-      suggestedMax: 10,
-    },
-  },
-  maintainAspectRatio: false,
-  elements: {
-    point: {
-      backgroundColor: "#FF0000",
-      radius: 8,
-    },
-  },
-  plugins: {
-    legend: false,
-  },
-};
-
-const styles = {
-  chartContainer: {
-    width: "600px",
-    height: "600px",
-  },
-};
 
 export default function Home({ posts }) {
   const [messageinput, setMessageinput] = useState("");
@@ -136,26 +103,7 @@ export default function Home({ posts }) {
         />
         <input type="submit" value="生成" />
       </form>
-      <h2>履歴</h2>
-      <ol>
-        {posts.map((post) => {
-          const date = new Date(post.last_edited_time).toLocaleString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-          });
-          return (
-            <li key={post.id}>
-              <h4>
-                <Link href={`/${post.id}`}>
-                  <Text text={post.properties.Name.title} />
-                </Link>
-              </h4>
-              <p>作成日時：{date}</p>
-            </li>
-          );
-        })}
-      </ol>
+      <HistoryList posts={posts} />
       <form onSubmit={onSubmit}>
         <h2>GPT API</h2>
         <p>
@@ -182,7 +130,7 @@ export default function Home({ posts }) {
           <p>エラー: {error}</p>
         </div>
       ) : result ? (
-        <div style={styles.chartContainer}>
+        <div style={{ width: "600px", height: "600px" }}>
           <p>レスポンス{res}</p>
           <Scatter data={result} options={options} />
           <h3>今回の利用トークン数</h3>
