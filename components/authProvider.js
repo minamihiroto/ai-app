@@ -10,7 +10,6 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
 
-  //session処理の実行中は画面を表示しないようにする
   useEffect(() => {
     let mounted = true;
 

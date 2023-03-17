@@ -106,15 +106,6 @@ export default function Home({ posts }) {
       <HistoryList posts={posts} />
       <form onSubmit={onSubmit}>
         <h2>GPT API</h2>
-        <p>
-          ・labelがmomo1のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-        </p>
-        <p>
-          ・labelがmomo1とmomo2のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-        </p>
-        <p>
-          ・labelがmomo1とmomo2とmomo3とmomo4とmomo5とmomo6とmomo7とmomo8とmomo9とmomo10とmomo11とmomo12とmomo13とmomo14とmomo15とmomo16とmomo17とmomo18とmomo19とmomo20のJSONデータを出してください。なお、xとyの値は1~10のいずれかの数値でお願いします
-        </p>
         <input
           type="text"
           style={{ width: "1000px", height: "24px" }}
