@@ -5,6 +5,8 @@ import { getDatabase } from "../components/notionProvider.js";
 import { useRouter } from "next/router";
 import options from "../components/chartConfig.js";
 import HistoryList from "../components/historyList";
+import NotionCreateForm from "../components/notionCreateForm";
+
 
 export const databaseId = process.env.NOTION_DB_ID;
 
@@ -93,16 +95,11 @@ export default function Home({ posts }) {
       <form onSubmit={onLogout}>
         <button type="submit">logout</button>
       </form>
-      <form onSubmit={onCreate}>
-        <h2>notion data create</h2>
-        <input
-          type="text"
-          style={{ width: "1000px", height: "24px" }}
-          value={createinput}
-          onChange={(e) => createMessageinput(e.target.value)}
-        />
-        <input type="submit" value="生成" />
-      </form>
+      <NotionCreateForm
+        createMessageinput={createMessageinput}
+        createinput={createinput}
+        onCreate={onCreate}
+      />
       <HistoryList posts={posts} />
       <form onSubmit={onSubmit}>
         <h2>GPT API</h2>
