@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Scatter } from "react-chartjs-2";
 import { useAuth } from "../components/authProvider.js";
-import { getDatabase } from "../components/notionProvider.js";
 import { useRouter } from "next/router";
 import options from "../components/chartConfig.js";
 import HistoryList from "../components/historyList";
 import NotionCreateForm from "../components/notionCreateForm";
 
-
 export const databaseId = process.env.NOTION_DB_ID;
 
-export default function Home({ posts }) {
+export default function Home() {
   const [messageinput, setMessageinput] = useState("");
   const [createinput, createMessageinput] = useState("");
   const [result, setResult] = useState();
@@ -22,10 +20,24 @@ export default function Home({ posts }) {
   const [isLoading, setIsLoading] = useState(false);
   const { session, logout } = useAuth();
   const router = useRouter();
+  const [posts, setPosts] = useState([]);
 
-  posts = posts.filter(
-    (post) => post.properties.Email.email === session.user.email
-  );
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("/api/notionFilter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: session.user.email }),
+      });
+
+      const data = await response.json();
+      setPosts(data);
+    }
+    fetchPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [posts]);
 
   const onLogout = () => {
     logout().then(() => router.push("/login"));
@@ -130,14 +142,3 @@ export default function Home({ posts }) {
     </div>
   );
 }
-
-export const getStaticProps = async () => {
-  const database = await getDatabase(databaseId);
-
-  return {
-    props: {
-      posts: database,
-    },
-    revalidate: 1,
-  };
-};
