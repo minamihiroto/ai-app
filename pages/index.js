@@ -36,11 +36,11 @@ export default function Home() {
       setPosts(data);
     }
     fetchPosts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [posts]);
 
-  const onLogout = () => {
-    logout().then(() => router.push("/login"));
+  const onLogout = async () => {
+    await logout().then(() => router.push("/login"));
   };
 
   async function onSubmit(event) {

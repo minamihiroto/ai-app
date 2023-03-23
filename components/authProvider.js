@@ -46,8 +46,8 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const logout = () => {
-    auth.signOut();
+  const logout = async () => {
+    await auth.signOut();
   };
 
   const exposed = {
