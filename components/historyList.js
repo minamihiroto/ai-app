@@ -7,7 +7,7 @@ function HistoryList({ posts }) {
       <h2>履歴</h2>
       <ol>
         {posts.map((post) => {
-          const date = new Date(post.last_edited_time).toLocaleString("en-US", {
+          const date = new Date(post.last_edited_time).toLocaleString("ja-JP", {
             month: "short",
             day: "2-digit",
             year: "numeric",
