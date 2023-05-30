@@ -15,7 +15,7 @@ const options = {
         align: "center",
         display: true,
         text: "y軸のタイトル",
-        minRotation:90,
+        minRotation: 90,
         font: {
           size: 16,
         },
@@ -45,6 +45,26 @@ const options = {
   },
   plugins: {
     legend: false,
+    tooltip: {
+      callbacks: {
+        title: function (context) {
+          var index = context[0].dataIndex;
+          // Return the label of the dataset
+          return context[0].dataset.label;
+        },
+        label: function (context) {
+          var index = context.dataIndex;
+          // Return the coordinates of the data point
+          return (
+            "(" +
+            context.dataset.data[index].x +
+            ", " +
+            context.dataset.data[index].y +
+            ")"
+          );
+        },
+      },
+    },
   },
 };
 
